@@ -8,7 +8,7 @@ function App() {
 
   const findWords = async () => {
      try {
-            const response = await fetch(`http://localhost:3001/getSomeWords?letters=${letters}&wordLength=${length}`)
+            const response = await fetch(`https://jtkyber.github.io/word-finder-api/getSomeWords?letters=${letters.toLowerCase()}&wordLength=${length}`)
             if (!response.ok) {
                 throw new Error('Error')
             }
