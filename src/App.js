@@ -1,23 +1,44 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [letters, setLetters] = useState('');
+  const [length, setLength] = useState('');
+  const [words, setWords] = useState([]);
+
+  const findWords = async () => {
+     try {
+            const response = await fetch(`http://localhost:3001/getSomeWords?letters=${letters}&wordLength=${length}`)
+            if (!response.ok) {
+                throw new Error('Error')
+            }
+            const results = await response.json();
+            setWords(results);
+        } catch(err) {
+            console.log(err);
+        }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+        <div className='search'>
+          Letters: <input onChange={e => setLetters(e.target.value)} className='letters' type='text'/>
+          Desired Word Length: <input onChange={e => setLength(e.target.value)} className='length' type='text'/>
+        </div>
+        <div className='enter'>
+          <button onClick={findWords}>Enter</button>
+        </div>
+        <div className='results'>
+        {
+          words.map(word => {
+            return (
+              <div className='word' key={word}>
+                <li>{word}</li>
+              </div>
+            )
+          })
+        }
+        </div>
     </div>
   );
 }
